@@ -30,8 +30,8 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["emr-site.vercel.app", "emr-backend.up.railway.app", "127.0.0.1", "localhost", "testserver"]
-CSRF_TRUSTED_ORIGINS = ['https://emr-site.vercel.app', 'https://emr-backend.up.railway.app', 'http://localhost:5173']
+ALLOWED_HOSTS = ["dermacare-group.vercel.app", "dermacare.up.railway.app", "127.0.0.1", "localhost", "testserver"]
+CSRF_TRUSTED_ORIGINS = ['https://dermacare-group.vercel.app', 'https://dermacare.up.railway.app', 'http://localhost:5173']
 
 # Application definition
 
@@ -76,15 +76,15 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",
-    "https://emr-site.vercel.app",
-    "https://emr-backend.up.railway.app"
+    "https://dermacare-group.vercel.app",
+    "https://dermacare.up.railway.app"
 ]
 
 
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
-    r'^https://emr-site\.vercel\.app$',
-    r'^https://emr-backend\.up\.railway\.app$'
+    r'^https://dermacare-group\.vercel\.app$',
+    r'^https://dermacare\.up\.railway\.app$'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
