@@ -30,8 +30,8 @@ if not os.path.exists(MODEL_PATH):
         f.write(response.content)
 
 if os.path.exists(MODEL_PATH):
-    # model = torch.load(MODEL_PATH, map_location=torch.device('cpu')).to(DEVICE)
-    model = torch.load(MODEL_PATH, map_location=torch.device('cpu'), weights_only=False).to(DEVICE)
+    model = torch.load(MODEL_PATH, map_location=torch.device('cpu')).to(DEVICE)
+    # model = torch.load(MODEL_PATH, map_location=torch.device('cpu'), weights_only=False).to(DEVICE)
     model.eval()
     skin_disease_labels = get_skin_disease_labels()  # Load disease labels
 else:
