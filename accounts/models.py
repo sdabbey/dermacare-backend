@@ -30,7 +30,7 @@ class UserAccountManager(BaseUserManager):
             firstname=firstname,
             lastname=lastname,
             password=password,
-            role='admin'  # Superusers have the 'admin' role
+            role='administrative'  # Superusers have the 'admin' role
         )
         user.is_staff = True
         user.is_superuser = True
