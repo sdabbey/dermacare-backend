@@ -17,15 +17,26 @@ from .utils import get_skin_disease_labels  # Ensure this file contains get_skin
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 THRESHOLD = 0.1
 
-# Load model at startup
+# Define model path
 MODEL_PATH = os.path.join(settings.MEDIA_ROOT, "model.bin")
+MODEL_URL = "https://drive.google.com/uc?export=download&id=1IS30IFSmu7qIzEa4pxyBFXJ6wSeh24bn"
 
-if os.path.exists(MODEL_PATH):
-    model = torch.load(MODEL_PATH, map_location=torch.device('cpu'), weights_only=False).to(DEVICE)
+
+# Ensure model file exists
+if not os.path.exists(MODEL_PATH):
+    print("Downloading model file...")
+    response = requests.get(MODEL_URL)
+    with open(MODEL_PATH, "wb") as f:
+        f.write(response.content)
+
+# Load model
+try:
+    model = torch.load(MODEL_PATH, map_location=torch.device("cpu")).to(DEVICE)
     model.eval()
-    skin_disease_labels = get_skin_disease_labels()  # Load disease labels
-else:
-    model = None  # Handle missing model later
+    skin_disease_labels = get_skin_disease_labels()
+except Exception as e:
+    print(f"Error loading model: {e}")
+    model = None
     skin_disease_labels = []
 
 # Image preprocessing function
@@ -43,7 +54,7 @@ class SkinAnalysisView(APIView):
 
     def post(self, request, *args, **kwargs):
         # 1️⃣ Get uploaded image
-        image_file = request.FILES.get('image')
+        image_file = request.FILES.get("image")
         if not image_file:
             return Response({"error": "No image uploaded"}, status=400)
 
@@ -72,9 +83,6 @@ class SkinAnalysisView(APIView):
         # 6️⃣ Make prediction
         with torch.no_grad():
             model_output = torch.sigmoid(model(image_tensor)).cpu().numpy()
-            print("Detected Conditions:", [skin_disease_labels[i] for i, _ in [(12, 0.625), (17, 0.034), (18, 0.042), (24, 0.162), (33, 0.051), (34, 0.154)]])
-
-
             binary_output = (model_output > THRESHOLD).astype(int).squeeze()
 
         # 7️⃣ Map results to conditions
